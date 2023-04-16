@@ -36,8 +36,19 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.sourceSerifPro().fontFamily,
         scaffoldBackgroundColor: Color(0xFFF4EEE0),
         appBarTheme: AppBarTheme(
-            color: Color(0xFF393646),
-            titleTextStyle: TextStyle(color: Color(0xF4EEE0))),
+          color: Color(0xFF393646),
+          titleTextStyle: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.italic,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(20),
+            ),
+          ),
+        ),
+       
       ),
       debugShowCheckedModeBanner: false,
       home: authGate(),

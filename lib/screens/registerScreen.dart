@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:midtermprojecttodoapp/screens/homeScreen.dart';
 import 'package:midtermprojecttodoapp/screens/todoScreen.dart';
 import 'package:quickalert/quickalert.dart';
 
@@ -19,11 +20,6 @@ class _registerScreenState extends State<registerScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmpassController = TextEditingController();
-  final fnameController = TextEditingController();
-  final mnameController = TextEditingController();
-  final lnameController = TextEditingController();
-  final bday = TextEditingController();
-  final addressController = TextEditingController();
 
   var obscurePassword = true;
   final _formkey = GlobalKey<FormState>();
@@ -57,7 +53,7 @@ class _registerScreenState extends State<registerScreen> {
         context,
         CupertinoPageRoute(
           builder: (context) {
-            return todoScreen();
+            return HomeScreen();
           },
         ),
       );
@@ -112,13 +108,13 @@ class _registerScreenState extends State<registerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Sign Up (Client)',
-          style: TextStyle(color: Colors.black),
+          'Register account',
+          style: TextStyle(color: Color(0xFFF4EEE0)),
         ),
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new,
-            color: Colors.black,
+            color: Color(0xFFF4EEE0),
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -132,6 +128,7 @@ class _registerScreenState extends State<registerScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                SizedBox(height: 20,),
                 const Text('Register your account:'),
                 const SizedBox(
                   height: 12.0,
@@ -210,16 +207,13 @@ class _registerScreenState extends State<registerScreen> {
                     fontSize: 16,
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    validateInput();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: const Text('Register'),
+                 ElevatedButton(
+                    onPressed: validateInput,
+                    style: ElevatedButton.styleFrom(
+                        primary: Color(0xFF393646),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18))),
+                    child: const Text('Register'),
                 ),
               ],
             ),

@@ -61,6 +61,7 @@ class _loginScreenState extends State<loginScreen> {
       }
     }).catchError((err) {
       if(mounted) {
+        Navigator.pop(context);
         QuickAlert.show(
           context: context,
           type: QuickAlertType.error,
@@ -92,7 +93,7 @@ class _loginScreenState extends State<loginScreen> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 12,
+                          height: 100,
                         ),
                         CircleAvatar(
                             radius: 50,
@@ -176,7 +177,6 @@ class _loginScreenState extends State<loginScreen> {
                     height: 12.0,
                   ),
                   ElevatedButton(
-                    // onPressed: registerClient,
                     onPressed: login,
                     style: ElevatedButton.styleFrom(
                         primary: Color(0xFF393646),
@@ -185,7 +185,6 @@ class _loginScreenState extends State<loginScreen> {
                     child: const Text('Login'),
                   ),
                   ElevatedButton(
-                    // onPressed: registerClient,
                     onPressed: () {
                       Navigator.push(
                         context,

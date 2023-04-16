@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:midtermprojecttodoapp/screens/homeScreen.dart';
 import 'package:midtermprojecttodoapp/screens/loginScreen.dart';
 import 'package:midtermprojecttodoapp/screens/todoScreen.dart';
 
@@ -18,7 +19,7 @@ class authGate extends StatelessWidget {
           if (!snapshot.hasData) {
             return loginScreen();
           }
-          return todoScreen();
+          return HomeScreen();
         });
   }
 }

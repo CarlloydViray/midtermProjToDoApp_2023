@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutterfire_ui/auth.dart';
-
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -17,21 +18,14 @@ class todoScreen extends StatefulWidget {
 }
 
 class _todoScreenState extends State<todoScreen> {
-  
+
+int selectedIndex = 1;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('ToDo Application'),
-          actions: [
-            SignOutButton()
-          ],
-        ),
-        // body: ElevatedButton(onPressed: (){
-        //   print(getAllDataFromFirestoreArray.toString());
-        // }, child: Text('DEBUG')),
-        body: FutureBuilder<List<dynamic>>(
+        child: Scaffold(
+      body: FutureBuilder<List<dynamic>>(
         future: getAllDataFromFirestoreArray(),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasError) {
@@ -47,36 +41,40 @@ class _todoScreenState extends State<todoScreen> {
           return ListView.builder(
             itemCount: data.length,
             itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () {
-                  return;
-                },
-                child: ListTile(
-                  title: Text(data[index].toString()),
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  child: ListTile(
+                    title: Text(data[index].toString()),
+                    trailing: Icon(Icons.done),
+                  ),
                 ),
               );
             },
           );
         },
       ),
-      ),
-    );
+    ));
   }
 }
 
-
 Future<List<dynamic>> getAllDataFromFirestoreArray() async {
-  List<dynamic> data = [];
+  final userID = FirebaseAuth.instance.currentUser!.uid;
+  List<dynamic> arrayData = [];
 
   try {
-    QuerySnapshot querySnapshot = await _firestore.collection('users').get();
+    DocumentSnapshot documentSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userID).get();
 
-    querySnapshot.docs.forEach((doc) {
-      data.addAll(doc.get('arrayFieldName'));
-    });
+    arrayData = documentSnapshot.get('todo');
   } catch (e) {
     print(e.toString());
   }
 
-  return data;
+  return arrayData;
 }
+
+
+// await documentReference.update({
+//   'array_field_name': FieldValue.arrayRemove([item_to_remove]),
+// });
