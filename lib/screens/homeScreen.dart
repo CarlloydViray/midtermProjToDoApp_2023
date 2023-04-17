@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:midtermprojecttodoapp/screens/finished.dart';
 import 'package:midtermprojecttodoapp/screens/toCreateScreen.dart';
 import 'package:midtermprojecttodoapp/screens/todoScreen.dart';
@@ -20,22 +21,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
         child: Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80.0),
         child: AppBar(
-          title: Text('ToDo Application', style: TextStyle(fontSize: 25),),
-          centerTitle: true,
-          leading: IconButton(onPressed: (){
-            QuickAlert.show(context: context, type: QuickAlertType.confirm, title: 'Logout?', onConfirmBtnTap: ()async{
-              await FirebaseAuth.instance.signOut();
-              Navigator.pop(context);
-            });
-          }, icon: Icon(Icons.logout))
-        
-        ),
+            title: Text(
+              'ToDo',
+              style: TextStyle(fontSize: 25),
+            ),
+            centerTitle: true,
+            leading: IconButton(
+                onPressed: () {
+                  if (ZoomDrawer.of(context)!.isOpen()) {
+                    ZoomDrawer.of(context)!.close();
+                  } else {
+                    ZoomDrawer.of(context)!.open();
+                  }
+                },
+                icon: Icon(Icons.menu))),
       ),
       body: getSelectedIndex(index: selectedIndex),
       bottomNavigationBar: CurvedNavigationBar(
@@ -71,19 +75,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-
-Widget getSelectedIndex({required int index}){
+Widget getSelectedIndex({required int index}) {
   Widget widget = Container();
-  switch(index){
+  switch (index) {
     case 0:
-    widget = const todoScreen();
-    break;
+      widget = const todoScreen();
+      break;
     case 1:
-    widget = const toCreate();
-    break;
+      widget = const toCreate();
+      break;
     case 2:
-    widget = const finished();
-    break;
+      widget = const finished();
+      break;
   }
   return widget;
 }

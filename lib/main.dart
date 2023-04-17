@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:midtermprojecttodoapp/firebase_options.dart';
 import 'package:midtermprojecttodoapp/authGate.dart';
-
+import 'package:midtermprojecttodoapp/screens/drawerScreen.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,11 +53,11 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: AnimatedSplashScreen(
-        duration: 3000,
-        splashTransition: SplashTransition.scaleTransition,
-        backgroundColor: Color(0xFFF4EEE0),
+          duration: 3000,
+          splashTransition: SplashTransition.scaleTransition,
+          backgroundColor: Color(0xFFF4EEE0),
           splash: Image(image: AssetImage('lib/assets/icons/1024.png')),
-          nextScreen: authGate()),
+          nextScreen: DrawerScreen()),
     );
   }
 }

@@ -113,17 +113,21 @@ class _todoScreenState extends State<todoScreen> {
                               icon: Icons.delete,
                             ),
                           ]),
-                          child: Card(
-                            child: ListTile(
-                              title: Text(data[index].toString()),
-                              trailing: Icon(
-                                Icons.arrow_circle_left_rounded,
-                                color: Color(0xFF393646),
-                              ),
-                              leading: CircleAvatar(
-                                backgroundColor: Color(0xFF393646),
-                                foregroundColor: Color(0xFFF4EEE0),
-                                child: Text(position.toString()),
+                          child: SizedBox(
+                            height: 85,
+                            child: Card(
+                              elevation: 30,
+                              child: ListTile(
+                                title: Text(data[index].toString()),
+                                trailing: Icon(
+                                  Icons.arrow_circle_left_rounded,
+                                  color: Color(0xFF393646),
+                                ),
+                                leading: CircleAvatar(
+                                  backgroundColor: Color(0xFF393646),
+                                  foregroundColor: Color(0xFFF4EEE0),
+                                  child: Text(position.toString()),
+                                ),
                               ),
                             ),
                           ),

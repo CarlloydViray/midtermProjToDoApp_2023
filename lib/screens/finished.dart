@@ -65,7 +65,7 @@ class _finishedState extends State<finished> {
                         padding: const EdgeInsets.all(5.0),
                         child: Slidable(
                           endActionPane:
-                              ActionPane(motion: ScrollMotion(), children: [                  
+                              ActionPane(motion: ScrollMotion(), children: [
                             SlidableAction(
                               onPressed: (context) {
                                 QuickAlert.show(
@@ -82,17 +82,21 @@ class _finishedState extends State<finished> {
                               icon: Icons.delete,
                             ),
                           ]),
-                          child: Card(
-                            child: ListTile(
-                              title: Text(data[index].toString()),
-                              trailing: Icon(
-                                Icons.arrow_circle_left_rounded,
-                                color: Color(0xFF393646),
-                              ),
-                              leading: CircleAvatar(
-                                backgroundColor: Color(0xFF393646),
-                                foregroundColor: Color(0xFFF4EEE0),
-                                child: Text(position.toString()),
+                          child: SizedBox(
+                            height: 80,
+                            child: Card(
+                              elevation: 30,
+                              child: ListTile(
+                                title: Text(data[index].toString()),
+                                trailing: Icon(
+                                  Icons.arrow_circle_left_rounded,
+                                  color: Color(0xFF393646),
+                                ),
+                                leading: CircleAvatar(
+                                  backgroundColor: Color(0xFF393646),
+                                  foregroundColor: Color(0xFFF4EEE0),
+                                  child: Text(position.toString()),
+                                ),
                               ),
                             ),
                           ),
@@ -124,7 +128,8 @@ Future<void> deleteData(int index) async {
   final userID = FirebaseAuth.instance.currentUser!.uid;
   final firestoreInstance = FirebaseFirestore.instance;
   final docRef = firestoreInstance.collection('users').doc(userID);
-  final currentArray = (await docRef.get()).data()?['finished'] as List<dynamic>;
+  final currentArray =
+      (await docRef.get()).data()?['finished'] as List<dynamic>;
 
   currentArray.removeAt(index);
 

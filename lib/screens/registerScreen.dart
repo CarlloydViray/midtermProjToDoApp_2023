@@ -86,7 +86,6 @@ class _registerScreenState extends State<registerScreen> {
   }
 
   void validateInput() {
-
     if (_formkey.currentState!.validate()) {
       QuickAlert.show(
         context: context,
@@ -121,14 +120,15 @@ class _registerScreenState extends State<registerScreen> {
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(12.0),
-          
           child: Center(
             child: Form(
               key: _formkey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 150,),
+                  SizedBox(
+                    height: 150,
+                  ),
                   const Text('Register your account:'),
                   const SizedBox(
                     height: 12.0,
@@ -152,7 +152,7 @@ class _registerScreenState extends State<registerScreen> {
                   const SizedBox(
                     height: 12.0,
                   ),
-          
+
                   //password
                   TextFormField(
                     validator: (value) {
@@ -186,7 +186,7 @@ class _registerScreenState extends State<registerScreen> {
                   const SizedBox(
                     height: 12.0,
                   ),
-          
+
                   //confirm password
                   TextFormField(
                     validator: (value) {
@@ -207,13 +207,13 @@ class _registerScreenState extends State<registerScreen> {
                       fontSize: 16,
                     ),
                   ),
-                   ElevatedButton(
-                      onPressed: validateInput,
-                      style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF393646),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18))),
-                      child: const Text('Register'),
+                  ElevatedButton(
+                    onPressed: validateInput,
+                    style: ElevatedButton.styleFrom(
+                        primary: Color(0xFF393646),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18))),
+                    child: const Text('Register'),
                   ),
                 ],
               ),

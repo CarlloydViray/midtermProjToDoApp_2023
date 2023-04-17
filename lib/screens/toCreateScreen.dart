@@ -46,12 +46,15 @@ class _toCreateState extends State<toCreate> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              height: 200,
+              height: 50,
             ),
             Image(
               image: AssetImage('lib/assets/icons/1024.png'),
               height: 150, // set height to 200 pixels
               width: 150,
+            ),
+            SizedBox(
+              height: 50,
             ),
             Form(
               key: _formkey,
