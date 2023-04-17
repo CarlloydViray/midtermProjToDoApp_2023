@@ -26,52 +26,48 @@ class _loginScreenState extends State<loginScreen> {
   var obscurePassword = true;
 
   void login() async {
-  if (_formkey.currentState!.validate()) {
-    QuickAlert.show(
+    if (_formkey.currentState!.validate()) {
+      QuickAlert.show(
           context: context,
           type: QuickAlertType.loading,
-          title: 'Checking user credentials...'
-        );
-    
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text
-    ).then((UserCredential) async {
-      if(mounted) {
-        Navigator.pop(context);
-        String collectionPath = 'user';
-        String uid = UserCredential.user!.uid;
-        final docSnapshot = await FirebaseFirestore.instance
-            .collection(collectionPath)
-            .doc(UserCredential.user!.uid)
-            .get();
-             
-        dynamic data = docSnapshot.data();
-        
-        Navigator.push(
-          context,
-          CupertinoPageRoute(
-            builder: ((context) {
-              return todoScreen();
-            }),
-          ),
-          
-        );
-        Navigator.pop(context);
-      }
-    }).catchError((err) {
-      if(mounted) {
-        Navigator.pop(context);
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          title: 'Invalid email and/or password'
-        );
-        
-      }
-    });
+          title: 'Checking user credentials...');
+
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text)
+          .then((UserCredential) async {
+        if (mounted) {
+          Navigator.pop(context);
+          String collectionPath = 'user';
+          String uid = UserCredential.user!.uid;
+          final docSnapshot = await FirebaseFirestore.instance
+              .collection(collectionPath)
+              .doc(UserCredential.user!.uid)
+              .get();
+
+          dynamic data = docSnapshot.data();
+
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: ((context) {
+                return todoScreen();
+              }),
+            ),
+          );
+          Navigator.pop(context);
+        }
+      }).catchError((err) {
+        if (mounted) {
+          Navigator.pop(context);
+          QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              title: 'Invalid email and/or password');
+        }
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -95,14 +91,11 @@ class _loginScreenState extends State<loginScreen> {
                         SizedBox(
                           height: 100,
                         ),
-                        CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Color(0xFF393646),
-                            child: Icon(
-                              Icons.checklist,
-                              size: 50,
-                              color: Color(0xFFF4EEE0),
-                            )),
+                        Image(
+                          image: AssetImage('lib/assets/icons/1024.png'),
+                          height: 150, // set height to 200 pixels
+                          width: 150,
+                        ),
                         SizedBox(
                           height: 12,
                         ),
