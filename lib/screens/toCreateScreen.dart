@@ -48,6 +48,11 @@ class _toCreateState extends State<toCreate> {
             SizedBox(
               height: 200,
             ),
+            Image(
+              image: AssetImage('lib/assets/icons/1024.png'),
+              height: 150, // set height to 200 pixels
+              width: 150,
+            ),
             Form(
               key: _formkey,
               child: TextFormField(
