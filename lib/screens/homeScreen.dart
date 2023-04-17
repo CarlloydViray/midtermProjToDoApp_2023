@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:midtermprojecttodoapp/screens/finished.dart';
 import 'package:midtermprojecttodoapp/screens/toCreateScreen.dart';
 import 'package:midtermprojecttodoapp/screens/todoScreen.dart';
+import 'package:quickalert/quickalert.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,11 +16,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int selectedIndex = 0;
+  int selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
-    
 
     return SafeArea(
         child: Scaffold(
@@ -28,14 +28,18 @@ class _HomeScreenState extends State<HomeScreen> {
         child: AppBar(
           title: Text('ToDo Application', style: TextStyle(fontSize: 25),),
           centerTitle: true,
-          leading: IconButton(onPressed: ()async{
-            await FirebaseAuth.instance.signOut();
+          leading: IconButton(onPressed: (){
+            QuickAlert.show(context: context, type: QuickAlertType.confirm, title: 'Logout?', onConfirmBtnTap: ()async{
+              await FirebaseAuth.instance.signOut();
+              Navigator.pop(context);
+            });
           }, icon: Icon(Icons.logout))
         
         ),
       ),
       body: getSelectedIndex(index: selectedIndex),
       bottomNavigationBar: CurvedNavigationBar(
+        index: selectedIndex,
         items: [
           Icon(
             Icons.checklist,
@@ -56,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Color(0xFF393646),
         backgroundColor: Color(0xFFF4EEE0),
         animationCurve: Curves.easeInOut,
-        animationDuration: Duration(milliseconds: 600),
+        animationDuration: Duration(milliseconds: 400),
         onTap: (index) {
           setState(() {
             selectedIndex = index;

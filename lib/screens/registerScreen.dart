@@ -86,7 +86,6 @@ class _registerScreenState extends State<registerScreen> {
   }
 
   void validateInput() {
-    //cause form to validate
 
     if (_formkey.currentState!.validate()) {
       QuickAlert.show(
@@ -123,99 +122,101 @@ class _registerScreenState extends State<registerScreen> {
         child: Container(
           padding: const EdgeInsets.all(12.0),
           
-          child: Form(
-            key: _formkey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: 20,),
-                const Text('Register your account:'),
-                const SizedBox(
-                  height: 12.0,
-                ),
-                //email
-                TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '*Required. Please enter an email address.';
-                    }
-                    if (!EmailValidator.validate(value)) {
-                      return 'Please enter a valid email address';
-                    }
-                  },
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email Address',
-                    border: OutlineInputBorder(),
+          child: Center(
+            child: Form(
+              key: _formkey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 150,),
+                  const Text('Register your account:'),
+                  const SizedBox(
+                    height: 12.0,
                   ),
-                ),
-                const SizedBox(
-                  height: 12.0,
-                ),
-
-                //password
-                TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '*Required. Please enter your password.';
-                    }
-                    if (value.length <= 6) {
-                      return 'Password must be more than 6 characters';
-                    }
-                  },
-                  obscureText: obscurePassword,
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          obscurePassword = !obscurePassword;
-                        });
-                      },
-                      icon: Icon(obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off),
+                  //email
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '*Required. Please enter an email address.';
+                      }
+                      if (!EmailValidator.validate(value)) {
+                        return 'Please enter a valid email address';
+                      }
+                    },
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email Address',
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                  style: TextStyle(
-                    fontSize: 16,
+                  const SizedBox(
+                    height: 12.0,
                   ),
-                ),
-                const SizedBox(
-                  height: 12.0,
-                ),
-
-                //confirm password
-                TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '*Required. Please enter your password.';
-                    }
-                    if (value != passwordController.text) {
-                      return 'Passwords don\'t match';
-                    }
-                  },
-                  obscureText: obscurePassword,
-                  controller: confirmpassController,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirm Password',
-                    border: OutlineInputBorder(),
+          
+                  //password
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '*Required. Please enter your password.';
+                      }
+                      if (value.length <= 6) {
+                        return 'Password must be more than 6 characters';
+                      }
+                    },
+                    obscureText: obscurePassword,
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obscurePassword = !obscurePassword;
+                          });
+                        },
+                        icon: Icon(obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
                   ),
-                  style: TextStyle(
-                    fontSize: 16,
+                  const SizedBox(
+                    height: 12.0,
                   ),
-                ),
-                 ElevatedButton(
-                    onPressed: validateInput,
-                    style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF393646),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18))),
-                    child: const Text('Register'),
-                ),
-              ],
+          
+                  //confirm password
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '*Required. Please enter your password.';
+                      }
+                      if (value != passwordController.text) {
+                        return 'Passwords don\'t match';
+                      }
+                    },
+                    obscureText: obscurePassword,
+                    controller: confirmpassController,
+                    decoration: const InputDecoration(
+                      labelText: 'Confirm Password',
+                      border: OutlineInputBorder(),
+                    ),
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                   ElevatedButton(
+                      onPressed: validateInput,
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF393646),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18))),
+                      child: const Text('Register'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
