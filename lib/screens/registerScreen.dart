@@ -141,6 +141,7 @@ class _registerScreenState extends State<registerScreen> {
                         return 'Please enter a valid email address';
                       }
                     },
+                    keyboardType: TextInputType.emailAddress,
                     controller: emailController,
                     decoration: const InputDecoration(
                       labelText: 'Email Address',

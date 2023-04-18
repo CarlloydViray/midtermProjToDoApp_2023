@@ -111,7 +111,7 @@ class _finishedState extends State<finished> {
                                 elevation: 30,
                                 child: ListTile(
                                   title: Text(data[index]['title'].toString()),
-                                  subtitle: Text("Created at: " +
+                                  subtitle: Text("Finished at: " +
                                       data[index]['date'].toString()),
                                   trailing: Icon(
                                     Icons.arrow_circle_left_rounded,

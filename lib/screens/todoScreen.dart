@@ -10,6 +10,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:intl/intl.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -206,6 +207,8 @@ Future<void> deleteData(int index) async {
 
 Future doneItem(int index) async {
   final userID = FirebaseAuth.instance.currentUser!.uid;
+  DateTime dateTime = DateTime.now();
+  String formattedDate = DateFormat('MMMM d, yyyy, h:mm a').format(dateTime);
 
   final documentReference =
       FirebaseFirestore.instance.collection('users').doc(userID);
@@ -215,8 +218,13 @@ Future doneItem(int index) async {
   final myArray = data?['todo'];
 
   final valueAtIndex = myArray[index];
+  Map<String, dynamic> finishedMap = {
+    'title': valueAtIndex,
+    'date': formattedDate,
+  };
+
   await documentReference.update({
-    'finished': FieldValue.arrayUnion([valueAtIndex]),
+    'finished': FieldValue.arrayUnion([finishedMap]),
   });
   deleteData(index);
 }
