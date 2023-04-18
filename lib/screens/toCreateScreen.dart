@@ -6,9 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:intl/intl.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 
 class toCreate extends StatefulWidget {
   const toCreate({super.key});
@@ -24,16 +28,35 @@ class _toCreateState extends State<toCreate> {
   void addItem() async {
     if (_formkey.currentState!.validate()) {
       final userID = FirebaseAuth.instance.currentUser!.uid;
+      DateTime dateTime = DateTime.now();
+      String formattedDate =
+          DateFormat('MMMM d, yyyy, h:mm a').format(dateTime);
+
+      Map<String, dynamic> todoMap = {
+        'title': todoTextController.text,
+        'date': formattedDate,
+      };
       DocumentReference documentReference =
           FirebaseFirestore.instance.collection('users').doc(userID);
       await documentReference.update({
-        'todo': FieldValue.arrayUnion([todoTextController.text]),
+        'todo': FieldValue.arrayUnion([todoMap]),
       });
       todoTextController.clear();
-      QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          text: 'Item added successfully');
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Success!',
+          message: 'Item added successfully',
+          contentType: ContentType.success,
+        ),
+        duration: Duration(milliseconds: 2500),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     }
   }
 
@@ -48,48 +71,76 @@ class _toCreateState extends State<toCreate> {
             SizedBox(
               height: 50,
             ),
-            Image(
-              image: AssetImage('lib/assets/icons/1024.png'),
-              height: 150, // set height to 200 pixels
-              width: 150,
+            Animate(
+              effects: [
+                FadeEffect(),
+                SlideEffect(curve: Curves.easeIn),
+              ],
+              child: Container(
+                width: double.infinity,
+                child: AvatarGlow(
+                  
+                  glowColor: Color(0xFF393646),
+                  repeat: true,
+                  showTwoGlows: true,
+                  repeatPauseDuration: Duration(milliseconds: 100),
+                  endRadius: 80.0,
+                  child: Image.asset(
+                        'lib/assets/icons/1024.png',
+                        height: 80,
+                      ),
+                ),
+              ),
             ),
             SizedBox(
               height: 50,
             ),
-            Form(
-              key: _formkey,
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '*Required. Please enter an item';
-                  }
-                },
-                controller: todoTextController,
-                decoration: InputDecoration(
-                  labelText: 'Add toDo item',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+            Animate(
+              effects: [
+                FadeEffect(),
+                SlideEffect(curve: Curves.easeIn),
+              ],
+              child: Form(
+                key: _formkey,
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '*Required. Please enter an item';
+                    }
+                  },
+                  controller: todoTextController,
+                  decoration: InputDecoration(
+                    labelText: 'Add toDo item',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
                   ),
-                  filled: true,
-                  fillColor: Colors.white,
                 ),
               ),
             ),
             SizedBox(
               height: 12,
             ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  addItem();
-                  FocusScope.of(context).unfocus();
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF393646),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18))),
-              child: const Text('Add to ToDo list'),
+            Animate(
+              effects: [
+                FadeEffect(),
+                SlideEffect(curve: Curves.easeIn),
+              ],
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    addItem();
+                    FocusScope.of(context).unfocus();
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF393646),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18))),
+                child: const Text('Add to ToDo list'),
+              ),
             ),
           ],
         ),

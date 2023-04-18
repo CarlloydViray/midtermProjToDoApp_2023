@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutterfire_ui/auth.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:quickalert/quickalert.dart';
 
@@ -27,21 +28,41 @@ class _todoScreenState extends State<todoScreen> {
     void _deleteItem(int index) async {
       await deleteData(index);
       Navigator.pop(context);
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        text: 'Item deleted successfully',
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Success!',
+          message: 'Item deleted successfully',
+          contentType: ContentType.success,
+        ),
+        duration: Duration(milliseconds: 2500),
       );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     }
 
     void _finishedItem(int index) async {
       await doneItem(index);
       Navigator.pop(context);
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        text: 'Item marked as finished',
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Success!',
+          message: 'Item marked as finished',
+          contentType: ContentType.success,
+        ),
+        duration: Duration(milliseconds: 2500),
       );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     }
 
     final userID = FirebaseAuth.instance.currentUser!.uid;
@@ -61,82 +82,99 @@ class _todoScreenState extends State<todoScreen> {
 
             List<dynamic> data = snapshot.data!;
 
-            return Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Current ToDo\'s:',
-                  style: TextStyle(fontSize: 20),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      int position = index + 1;
-                      return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Slidable(
-                          endActionPane:
-                              ActionPane(motion: ScrollMotion(), children: [
-                            SlidableAction(
-                              onPressed: (context) async {
-                                QuickAlert.show(
-                                    context: context,
-                                    type: QuickAlertType.confirm,
-                                    confirmBtnText: 'Yes',
-                                    title: 'Mark as finished?',
-                                    onConfirmBtnTap: () {
-                                      _finishedItem(index);
-                                    });
-                              },
-                              backgroundColor: Colors.green,
-                              foregroundColor: Colors.white,
-                              icon: Icons.done,
-                            ),
-                            SlidableAction(
-                              onPressed: (context) {
-                                QuickAlert.show(
-                                    context: context,
-                                    type: QuickAlertType.confirm,
-                                    confirmBtnText: 'Delete',
-                                    onConfirmBtnTap: () {
-                                      _deleteItem(index);
-                                    });
-                              },
-                              backgroundColor: Colors.red,
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                            ),
-                          ]),
-                          child: SizedBox(
-                            height: 85,
-                            child: Card(
-                              elevation: 30,
-                              child: ListTile(
-                                title: Text(data[index].toString()),
-                                trailing: Icon(
-                                  Icons.arrow_circle_left_rounded,
-                                  color: Color(0xFF393646),
-                                ),
-                                leading: CircleAvatar(
-                                  backgroundColor: Color(0xFF393646),
-                                  foregroundColor: Color(0xFFF4EEE0),
-                                  child: Text(position.toString()),
+            return Animate(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Animate(
+                    effects: [
+                      FadeEffect(),
+                      SlideEffect(curve: Curves.easeIn),
+                    ],
+                    child: Text(
+                      'Current ToDo\'s:',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        int position = index + 1;
+                        return Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Slidable(
+                            endActionPane:
+                                ActionPane(motion: ScrollMotion(), children: [
+                              SlidableAction(
+                                onPressed: (context) async {
+                                  QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.confirm,
+                                      confirmBtnText: 'Yes',
+                                      title: 'Mark as finished?',
+                                      onConfirmBtnTap: () {
+                                        _finishedItem(index);
+                                      });
+                                },
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                                icon: Icons.done,
+                              ),
+                              SlidableAction(
+                                onPressed: (context) {
+                                  QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.confirm,
+                                      confirmBtnText: 'Delete',
+                                      onConfirmBtnTap: () {
+                                        _deleteItem(index);
+                                      });
+                                },
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                              ),
+                            ]),
+                            child: SizedBox(
+                              height: 85,
+                              child: Animate(
+                                effects: [
+                                  FadeEffect(),
+                                  SlideEffect(curve: Curves.easeIn),
+                                ],
+                                child: Card(
+                                  elevation: 30,
+                                  child: ListTile(
+                                    title:
+                                        Text(data[index]['title'].toString()),
+                                    subtitle: Text("Created at: " +
+                                        data[index]['date'].toString()),
+                                    trailing: Icon(
+                                      Icons.arrow_circle_left_rounded,
+                                      color: Color(0xFF393646),
+                                    ),
+                                    leading: CircleAvatar(
+                                      backgroundColor: Color(0xFF393646),
+                                      foregroundColor: Color(0xFFF4EEE0),
+                                      child: Text(position.toString()),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),

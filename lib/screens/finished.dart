@@ -1,9 +1,11 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:quickalert/quickalert.dart';
 
@@ -20,11 +22,21 @@ class _finishedState extends State<finished> {
     void _deleteItem(int index) async {
       await deleteData(index);
       Navigator.pop(context);
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        text: 'Item deleted successfully',
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Success!',
+          message: 'Item deleted successfully',
+          contentType: ContentType.success,
+        ),
+        duration: Duration(milliseconds: 2500),
       );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     }
 
     final userID = FirebaseAuth.instance.currentUser!.uid;
@@ -49,9 +61,15 @@ class _finishedState extends State<finished> {
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Finished ToDo\'s:',
-                  style: TextStyle(fontSize: 20),
+                Animate(
+                  effects: [
+                    FadeEffect(),
+                    SlideEffect(curve: Curves.easeIn),
+                  ],
+                  child: Text(
+                    'Finished ToDo\'s:',
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ),
                 SizedBox(
                   height: 20,
@@ -84,18 +102,26 @@ class _finishedState extends State<finished> {
                           ]),
                           child: SizedBox(
                             height: 80,
-                            child: Card(
-                              elevation: 30,
-                              child: ListTile(
-                                title: Text(data[index].toString()),
-                                trailing: Icon(
-                                  Icons.arrow_circle_left_rounded,
-                                  color: Color(0xFF393646),
-                                ),
-                                leading: CircleAvatar(
-                                  backgroundColor: Color(0xFF393646),
-                                  foregroundColor: Color(0xFFF4EEE0),
-                                  child: Text(position.toString()),
+                            child: Animate(
+                              effects: [
+                                FadeEffect(),
+                                SlideEffect(curve: Curves.easeIn),
+                              ],
+                              child: Card(
+                                elevation: 30,
+                                child: ListTile(
+                                  title: Text(data[index]['title'].toString()),
+                                  subtitle: Text("Created at: " +
+                                      data[index]['date'].toString()),
+                                  trailing: Icon(
+                                    Icons.arrow_circle_left_rounded,
+                                    color: Color(0xFF393646),
+                                  ),
+                                  leading: CircleAvatar(
+                                    backgroundColor: Color(0xFF393646),
+                                    foregroundColor: Color(0xFFF4EEE0),
+                                    child: Text(position.toString()),
+                                  ),
                                 ),
                               ),
                             ),
