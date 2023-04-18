@@ -33,11 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
             centerTitle: true,
             leading: IconButton(
                 onPressed: () {
-                  if (ZoomDrawer.of(context)!.isOpen()) {
-                    ZoomDrawer.of(context)!.close();
-                  } else {
-                    ZoomDrawer.of(context)!.open();
-                  }
+                  ZoomDrawer.of(context)!.toggle();
                 },
                 icon: Icon(Icons.menu))),
       ),

@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,7 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:midtermprojecttodoapp/authGate.dart';
 import 'package:midtermprojecttodoapp/screens/homeScreen.dart';
+import 'package:midtermprojecttodoapp/screens/loginScreen.dart';
 import 'package:midtermprojecttodoapp/screens/todoScreen.dart';
 import 'package:quickalert/quickalert.dart';
 
@@ -39,21 +42,16 @@ class _registerScreenState extends State<registerScreen> {
       if (userCredential.user == null) {
         throw FirebaseAuthException(code: 'null-usercredential');
       }
-      //created user account -> UID
       String uid = userCredential.user!.uid;
       FirebaseFirestore.instance
           .collection(collectionPath)
           .doc(uid)
           .set({'todo': [], 'finished': []});
-      QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          title: 'User Created!');
       Navigator.push(
         context,
         CupertinoPageRoute(
           builder: (context) {
-            return HomeScreen();
+            return authGate();
           },
         ),
       );

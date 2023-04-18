@@ -189,7 +189,7 @@ class _loginScreenState extends State<loginScreen> {
                         primary: Color(0xFF6D5D6E),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18))),
-                    child: const Text('Register'),
+                    child: const Text('Register new account'),
                   ),
                 ],
               ),
