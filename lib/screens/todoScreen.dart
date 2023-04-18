@@ -216,8 +216,7 @@ Future doneItem(int index) async {
   final data = snapshot.data();
 
   final myArray = data?['todo'];
-
-  final valueAtIndex = myArray[index];
+  final valueAtIndex = myArray[index]['title'];
   Map<String, dynamic> finishedMap = {
     'title': valueAtIndex,
     'date': formattedDate,
