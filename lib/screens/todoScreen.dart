@@ -23,6 +23,8 @@ class todoScreen extends StatefulWidget {
 
 class _todoScreenState extends State<todoScreen> {
   int selectedIndex = 1;
+  final _formkey = GlobalKey<FormState>();
+  var todoTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -110,38 +112,175 @@ class _todoScreenState extends State<todoScreen> {
                         return Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Slidable(
-                            endActionPane:
-                                ActionPane(motion: ScrollMotion(), children: [
-                              SlidableAction(
-                                onPressed: (context) async {
-                                  QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.confirm,
-                                      confirmBtnText: 'Yes',
-                                      title: 'Mark as finished?',
-                                      onConfirmBtnTap: () {
-                                        _finishedItem(index);
-                                      });
-                                },
-                                backgroundColor: Colors.green,
-                                foregroundColor: Colors.white,
-                                icon: Icons.done,
-                              ),
-                              SlidableAction(
-                                onPressed: (context) {
-                                  QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.confirm,
-                                      confirmBtnText: 'Delete',
-                                      onConfirmBtnTap: () {
-                                        _deleteItem(index);
-                                      });
-                                },
-                                backgroundColor: Colors.red,
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                              ),
-                            ]),
+                            endActionPane: ActionPane(
+                                extentRatio: 0.8,
+                                motion: ScrollMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      todoTextController.text =
+                                          data[index]['title'].toString();
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text('Edit ToDo item'),
+                                            content: Form(
+                                              key: _formkey,
+                                              child: TextFormField(
+                                                validator: (value) {
+                                                  if (value == null ||
+                                                      value.isEmpty) {
+                                                    return '*Required. Please enter an item';
+                                                  }
+                                                },
+                                                controller: todoTextController,
+                                                decoration: InputDecoration(
+                                                  labelText: 'Add toDo item',
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  filled: true,
+                                                  fillColor: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            actions: [
+                                              TextButton.icon(
+                                                  onPressed: () {
+                                                    if (_formkey.currentState!
+                                                        .validate()) {
+                                                      QuickAlert.show(
+                                                          context: context,
+                                                          type: QuickAlertType
+                                                              .confirm,
+                                                          confirmBtnText: 'Yes',
+                                                          title: 'Update item?',
+                                                          onConfirmBtnTap:
+                                                              () async {
+                                                            final userID =
+                                                                FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser!
+                                                                    .uid;
+                                                            DateTime dateTime =
+                                                                DateTime.now();
+                                                            String
+                                                                formattedDate =
+                                                                DateFormat(
+                                                                        'MMMM d, yyyy, h:mm a')
+                                                                    .format(
+                                                                        dateTime);
+
+                                                            Map<String, dynamic>
+                                                                finishedMap = {
+                                                              'title':
+                                                                  todoTextController
+                                                                      .text,
+                                                              'date':
+                                                                  formattedDate,
+                                                            };
+                                                            DocumentReference
+                                                                documentReference =
+                                                                FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'users')
+                                                                    .doc(
+                                                                        userID);
+                                                            await documentReference
+                                                                .update({
+                                                              'todo': FieldValue
+                                                                  .arrayUnion([
+                                                                finishedMap
+                                                              ]),
+                                                            });
+                                                            deleteData(index);
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+                                                            final snackBar =
+                                                                SnackBar(
+                                                              elevation: 0,
+                                                              behavior:
+                                                                  SnackBarBehavior
+                                                                      .floating,
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              content:
+                                                                  AwesomeSnackbarContent(
+                                                                title:
+                                                                    'Success!',
+                                                                message:
+                                                                    'Item deleted successfully',
+                                                                contentType:
+                                                                    ContentType
+                                                                        .success,
+                                                              ),
+                                                              duration: Duration(
+                                                                  milliseconds:
+                                                                      2500),
+                                                            );
+
+                                                            ScaffoldMessenger
+                                                                .of(context)
+                                                              ..hideCurrentSnackBar()
+                                                              ..showSnackBar(
+                                                                  snackBar);
+                                                          });
+                                                    }
+                                                  },
+                                                  icon: Icon(Icons.update),
+                                                  label: Text('Update'),
+                                                  style: TextButton.styleFrom(
+                                                      iconColor: Colors.white,
+                                                      foregroundColor:
+                                                          Colors.white,
+                                                      backgroundColor:
+                                                          Color(0xFF393646)))
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    backgroundColor: Color(0xff6D5D6E),
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.visibility,
+                                  ),
+                                  SlidableAction(
+                                    onPressed: (context) async {
+                                      QuickAlert.show(
+                                          context: context,
+                                          type: QuickAlertType.confirm,
+                                          confirmBtnText: 'Yes',
+                                          title: 'Mark as finished?',
+                                          onConfirmBtnTap: () {
+                                            _finishedItem(index);
+                                          });
+                                    },
+                                    backgroundColor: Colors.green,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.done,
+                                  ),
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      QuickAlert.show(
+                                          context: context,
+                                          type: QuickAlertType.confirm,
+                                          confirmBtnText: 'Delete',
+                                          onConfirmBtnTap: () {
+                                            _deleteItem(index);
+                                          });
+                                    },
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                  ),
+                                ]),
                             child: SizedBox(
                               height: 85,
                               child: Animate(
